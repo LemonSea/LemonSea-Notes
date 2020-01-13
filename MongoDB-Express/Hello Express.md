@@ -1,0 +1,905 @@
+# 概述
+
+使用 Express 实现一个简单的 Node.js 的 NodeList。
+
+使用的数据库是网上数据库，专注于 Node.js 的后端功能。
+
+本次使用的 Express 是 4.X 版本。
+
+[官方文档地址](http://www.expressjs.com.cn/4x/api.html)
+
+## Express 三特性：
+
+- Express 是一个路由系统，它很简单，方便应用与维护。
+- Express 集成了很多模板引擎。
+- Express 是一个中间件系统。
+
+# 需要的依赖
+
+## 安装 Express
+
+使用命令：
+
+```bash
+$ npm install express
+```
+
+按照 Express 到当前文件夹。
+
+新建 server.js 文件（nodemon 启动时会自动寻找 server.js 为启动文件，如果不叫这个名字我们就需要手动指定启动文件，例如 app.js：
+
+```bash
+$ nodemon app.js
+```
+
+在 server.js 中导入 express：
+
+```javascript
+// 导入 express 包
+let express = require('express');
+
+// 生成一个实例
+let app = express();
+
+// 定义路由
+// 指定请求方法：get、post、delete 等
+// 这里使用的 get 方法
+// req：请求；res：响应。
+app.get('/', function (req, res) {
+    res.send('this is the homepage');
+});
+
+// 设当监听端口号
+app.listen(3000);
+```
+
+## nodemon 插件
+
+nodemon 这个插件可以帮助我们实时更新 server，当我们对代码做了修改并保存后，会自动重启服务器。
+
+```bash
+$ npm install modemon --g
+```
+
+## body-parser 插件
+
+这个库用于模拟生成 post 表单。
+
+[Github 文档](https://github.com/expressjs/body-parser)
+
+```bash
+$ npm install body-parser --save
+```
+
+## multer 插件
+
+这个库用于文件接收。
+
+[GitHub文档](https://github.com/expressjs/multer/blob/master/README.md)
+
+```bash
+$ npm install --save multer
+```
+
+# 返回响应内容
+
+## send 方法
+
+send 方法不只可以发送字符串，还可以发送其他内容，例如 json 格式的数据：
+
+```javascript
+let express = require('express');
+
+let app = express();
+
+// 对上面的方法进行了修改，改为了发送 Json 的字符串。
+app.get('/', function (req, res) {
+    let responseData = { "Id": 001, "Name": "Lmeon" }
+    res.send(responseData);
+});
+
+app.listen(3000);
+```
+
+当然也可以放入数组等。
+
+## json 方法
+
+send 可以返回 json，也可以返回纯文本；而 json 方法就只能返回 json 了。
+
+# 获取请求的内容
+
+请查看官方文档，简单移动，最新无错。
+
+# 路由
+
+**Express 最重要的能力就是路由。**
+
+## 动态路由
+
+```javascript
+let express = require('express');
+
+let app = express();
+
+// 这里制定了路由，id 和 name 是动态的
+// 下面可以通过 req 来获取路由的参数
+app.get('/profile/:id/:name', function (req, res) {
+    let responseData = ( "you requset is " + req.params.name );
+    res.status(200).send(responseData);
+});
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+## 使用正则匹配路由
+
+```javascript
+let express = require('express');
+
+let app = express();
+
+// 这里使用的是正则的方法在匹配路由
+// ab?c 这里表示的意思是允许 0 或 1 个 b
+app.get('/ab?c', function (req, res) {
+    res.send("/ab?c");
+});
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+# 处理请求（获取内容）
+
+## 处理 Get 请求
+
+```javascript
+let express = require('express');
+
+let app = express();
+
+// 可以取出 http://localhost:3000/?id=1&&name=lemon 中 ？ 后面的内容
+app.get('/', function (req, res) {
+    console.dir(req.query)
+    // 因为取出的内容是 JSON 格式，所以转义一下。
+    res.send("home page " + JSON.stringify(req.query));
+});
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+`console.dir()` 是在 VSCode 控制台打印，这里不能使用 `console.log()`。
+
+## 处理 Post 请求（body-parser）
+
+需要使用一个库来处理 post 请求：body-parser：
+
+```bash
+$ npm install body-parser --save
+```
+
+使用方法，[文档](https://github.com/expressjs/body-parser#examples) 中有。
+
+### 处理单一类型的请求：
+
+```javascript
+var express = require('express')
+var bodyParser = require('body-parser')
+
+var app = express()
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+app.use(function (req, res) {
+  res.setHeader('Content-Type', 'text/plain')
+  res.write('you posted:\n')
+  res.end(JSON.stringify(req.body, null, 2))
+})
+```
+
+然后我们通过 `PostMan` 这个软件模拟提交。
+
+值得注意的是，上面的第一种写法接收的格式是 `x-www-form-urlencoded`，即普通表单格式，无法处理其他格式。第二种写法是接收的格式是 `json`。一次只能指定一种。
+
+【示例】
+
+```javascript
+let express = require('express');
+var bodyParser = require('body-parser');
+
+let app = express();
+
+// // parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+app.post('/', function (req, res) {
+    console.dir(req.body);
+    res.send(req.body);
+})
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+如今使用 PostMan 进行模拟就可以看见效果了。
+
+【注意】
+
+`form-data` 是表单文件格式，**可以通过表单传递文件**。
+
+在上面的 `app.use()` 是使用中间件，在**request**和**response**之间。
+
+上面的做法指定了请求类型后就不能接受其他类型的请求了。
+
+### 处理多类型的请求
+
+还是这个中间件，[文档](https://github.com/expressjs/body-parser#express-route-specific)参考：
+
+```javascript
+var express = require('express')
+var bodyParser = require('body-parser')
+
+var app = express()
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+// POST /login gets urlencoded bodies
+app.post('/login', urlencodedParser, function (req, res) {
+  res.send('welcome, ' + req.body.username)
+})
+
+// POST /api/users gets JSON bodies
+app.post('/api/users', jsonParser, function (req, res) {
+  // create user in req.body
+})
+```
+
+上面就可以指定获取多个类型的请求。
+
+【示例】
+
+```javascript
+let express = require('express');
+var bodyParser = require('body-parser');
+
+let app = express();
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+// POST /login gets urlencoded bodies
+app.post('/', urlencodedParser, function (req, res) {
+    console.dir(req.body);
+    res.send(req.body);
+})
+
+// POST /api/users gets JSON bodies
+app.post('/upload', jsonParser, function (req, res) {
+    console.dir(req.body);
+    res.send(req.body);
+})
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+在上面的程序中，使用 `/upload` 可以接收 JSON，使用 `/` 可以接收普通表单。
+
+# 文件上传与获取
+
+我们先写一个上传文件的表单：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action='/upload' method='post' enctype="multipart/form-data">
+        <h2>Form Update</h2>
+        <input type="file" name="logo" >
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>
+```
+
+我们利用 get 方法把这个表单提交到服务器：
+
+```javascript
+app.get('/form', function (req, res) {
+    let form = fs.readFileSync('./form.html', { encoding: "utf-8" });
+    res.send(form);
+})
+```
+
+这里的 fs 是 [node.js](http://nodejs.cn/api/) 的**文件系统**模块，我们对它进行了导入：
+
+```javascript
+let fs = require('fs');
+```
+
+## 接收与保存文件
+
+我们再写表单的接收方法，这里我们需要一个中间件：multer，安装：
+
+```bash
+$ npm install --save multer
+```
+
+这个库的使用方法在 Express 的官网的 **[资源](http://www.expressjs.com.cn/en/resources/middleware/multer.html)** 板块可以找到：
+
+```javascript
+var express = require('express')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
+var app = express()
+
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  // req.file 是 `avatar` 文件的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
+  // req.files 是 `photos` 文件数组的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
+app.post('/cool-profile', cpUpload, function (req, res, next) {
+  // req.files 是一个对象 (String -> Array) 键是文件名，值是文件数组
+  //
+  // 例如：
+  //  req.files['avatar'][0] -> File
+  //  req.files['gallery'] -> Array
+  //
+  // req.body 将具有文本域数据，如果存在的话
+})
+```
+
+该方法的作用就是接收和保存文件。
+
+【示例】
+
+使用时先导入：
+
+```javascript
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+```
+
+然后修改 post 方法，我们的表单指定的是 upload 方法：
+
+```javascript
+// 对比上面，single() 里的方法是文件文本框的 name 的值。
+app.post('/upload', upload.single('logo'), function (req, res) {
+    res.send({ 'ret_code': 0 });
+})
+```
+
+现在我们就可以在浏览器的 `http://localhost:3000/form` 地址通过表单上传我们的文件，上传成功会跳到 `http://localhost:3000/upload` 页面，并且在我们的当前文件夹会多出一个 `uploads` 文件夹，里面保存着我们上传的文件。
+
+## 修改存储位置和名字
+
+如要修改存储位置和存储名字，查阅文档 [磁盘存储](https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md#%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E-diskstorage)：
+
+```javascript
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '/tmp/my-uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({ storage: storage })
+```
+
+上面会把文件保存在 `/tmp/my-uploads` 中，并且文件的命名方式是：`file.fieldname + '-' + Date.now()`。
+
+我们修改一下存储位置：
+
+```javascript
+// 这个方法就是创建指定文件夹，使用的是我们导入的 node.js 的 fs 模块
+var createFolder = function (folder) {
+    try {
+        fs.accessSync(folder);
+    } catch {
+        fs.mkdirSync(folder);
+    }
+}
+// 这里确定了保存文件的文件夹名称
+var uploadFolder = './upload/';
+// 这里就算调用方法，如果没有 upload 文件夹就创建
+createFolder(uploadFolder)
+
+// 上面都是在创建指定的文件夹
+// 下面指定文件的保存位置已经文件重命名
+var storage = multer.diskStorage({
+    // 这里更新了保存的文件夹
+    destination: function (req, file, cb) {
+        cb(null, uploadFolder)
+    },
+    // 这里的 filename 是 file input 的 name
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+var upload = multer({ storage: storage })
+```
+
+上面我们使用了 fieldname，指定文件的名称，查阅 [文档](https://github.com/expressjs/multer/blob/master/README.md#usage)，在 `Usage` 的代码注释中就说明了：
+
+**req.file is the `avatar` file**，我们打印一下：
+
+```bash
+{ fieldname: 'logo',
+  originalname: '徐小平.jpg',
+  encoding: '7bit',
+  mimetype: 'image/jpeg',
+  destination: './upload/',
+  filename: 'logo-1578482813836',
+  path: 'upload\\logo-1578482813836',
+  size: 15219 
+ }
+```
+
+所以，我们把 `fieldname` 改成 `originalname` 就行了。当然，需要注意的是，这个 originalname 是带着格式的  -_- 。
+
+嗯，用 PostMan 模拟也行。
+
+## Express SendFile 方法上传 HTML：
+
+原代码：
+
+```javascript
+app.get('/form', function (req, res) {
+    let form = fs.readFileSync('./form.html', { encoding: "utf-8" });
+    res.send(form);
+})
+```
+
+上面的代码是使用的 node.js 的 fs 模块的文件上传方法，而 express 自己也有封装文件上传的接口：
+
+```javascript
+app.get('/form', function (req, res) {
+    res.sendfile(__dirname + '/form.html');
+    // 等同于：
+    // res.sendfile('./form.html');    
+})
+```
+
+# 模板引擎（EJS）
+
+在 HTML 文件中动态嵌入变量。
+
+在上面的上传表单页面的方法中，我们只能上传静态表单，而无法在表单中嵌入变量进行操作，如果想要实现这一点，需要用到模板引擎。
+
+## 简单使用
+
+本次使用的**模板引擎**是 `EJS`，使用模板引擎的方法就是按照其文档定义的语法写就行了：
+
+安装 EJS：
+
+```bash
+$ npm install ejs -save
+```
+
+在 Express 中使用模板引擎：详见 [Express文档](http://expressjs.com/zh-cn/guide/using-template-engines.html)
+
+```javascript
+app.set('view engine', 'ejs');
+app.set('views', './views');
+```
+
+上面是指定模板引擎的类型和指定模板所在目录，详见文档。
+
+修改一下之前上传 form 表单的方法，以将变量传入定义好的 ejs 页面（因为我们使用的是 EJS 模板引擎）：
+
+```javascript
+app.get('/form/:name', function (req, res) {
+    console.dir('start')
+    // 自定义要传入 HTML 的变量
+    let person = req.params.name;
+    // 把 person 传入 form.ejx 页面
+    res.render('form', { person: person })
+})
+```
+
+在 `views` 文件夹中，创建一个 ejs 文件，内容和 form.html 页面内容一样，唯一的修改就是接收 person 变量的地方。（这也是我们选择 ejs 的原因，它的模板页面写法同 HTML，其他引擎的写法就要看引擎的定义了。
+
+```ejs
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    // 直接就复制了 form 表单，只有这下面写了个接收 person 变量的地方
+    // 感觉和 C# 的页面语法类似来着
+    <h1><%= person %></h1>
+    <form action='/upload' method='post' enctype="multipart/form-data">
+        <h2>Form Update</h2>
+        <input type="file" name="logo">
+        <input type="submit" value="submit">
+    </form>
+</body>
+
+</html>
+```
+
+## 高阶应用
+
+上面我们传递的是一个字符串，但实际上我们可以传递对象，数组等类型。
+
+模板共用，即一个模板中应用其他的模板（例如页面详情模板中引用导航栏模板（谜之像C#））
+
+# 中间件
+
+## 简述：
+
+```javascript
+let express = require('express');
+let app = express();
+
+app.use(function(req, res, next) {
+    console.log("first middleware");
+    next();
+})
+
+app.get('/', function(req, res) {
+    console.log("second middleware")
+    res.send('ok');
+})
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+上面的写法中，use 就是使用中间件的意思，get 的函数本质也是一个中间件的函数，它应该有三个参数：req、res、next。get 的中间件一般是最后一个，处理完 get 的函数后就结束了，没有传递给下一个中间件。而我们通过 use  使用的中间件，在结束后调用了 next() 方法以传递给下一个中间件执行。
+
+不调用 next  就不会传递下一个中间件，即在当前结束，不会去到 get，也就不会打印 `second middleware` 以及响应 `ok`。
+
+## 响应顺序
+
+```javascript
+app.use(function(req, res, next) {
+    console.log("first middleware end");
+    next();
+    console.log("first middleware end");
+})
+
+app.use(function(req, res, next) {
+    console.log("secound middleware");
+    res.send('ok');
+})
+```
+
+上面的输出顺序，就是先 first start，然后 second，再 first end。（没错，想到了 generator ）。
+
+且 use 的第一个参数可以是一个路径名：
+
+```javascript
+app.use(function (req, res, next) {
+    console.log("first middleware end");
+    next();
+    console.log("first middleware end");
+})
+
+app.use('/home', function (req, res, next) {
+    console.log("secound middleware");
+    res.send('ok');
+})
+```
+
+按照如上改造一下，那么 `http://localhost:3000/` 也就不会进入第二个中间件，直接 first start 后 first end 结束，没有 second 了。
+
+通过 `http://localhost:3000/home` 才会进入第二个中间件，执行： first start，second，first end。
+
+## Express 默认中间件：静态文件访问
+
+Express 有一个响应静态文件的默认中间件，[文档](http://www.expressjs.com.cn/starter/static-files.html)
+
+```javascript
+app.use(express.static('public'))
+```
+
+这里指定了 public 目录，只要将静态文件放进这个目录，我们就可以通过静态文件名称（带格式）来进行访问，eg：`http://localhost:3000/header.jpg`。
+
+可以嵌套访问：`http://localhost:3000/assets/header.jpg`。
+
+也可以设置路由：
+
+```javascript
+app.use('/img', express.static('public'))
+```
+
+这就是在文件名前面加上 img 才能访问：`http://localhost:3000/img/header.jpg`。
+
+# 路由
+
+我们之前的路由写在一个页面，不利于维护，使用 Express  的 Router 对路由进行重构，[文档](http://www.expressjs.com.cn/guide/routing.html) 末尾有 Router 方法的介绍：
+
+先新建路由文件夹，里面放上对各个页面路由的处理，如 index.js 正对根路由  何 users.js 正对 users 页面的路由：
+
+index.js 的内容：
+
+```javascript
+var express = require('express')
+var router = express.Router()
+
+router.get('/', function (req, res, next) {
+    res.send('root');
+})
+
+module.exports = router
+```
+
+users.js 的内容：
+
+```js
+var express = require('express')
+var router = express.Router()
+
+router.get('/users', function (req, res, next) {
+    res.send('users');
+})
+
+module.exports = router
+```
+
+上面我们导入了 express.Router 模块，创建了对应的路由处理后，再导出，在 server.js 文件中使用它：
+
+```js
+let express = require('express');
+let app = express();
+
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
+
+app.get('/', indexRouter);
+app.get('/users', usersRouter);
+
+app.listen(3000)
+console.log('listening to port 3000');
+```
+
+可以看到，先在的 server.js 页面就很规范，业务的处理代码都去了对应页面中，不同的路由在不同的文件，方便维护也方便开发。
+
+# 实例：TodoList
+
+## 需要的依赖
+
+- Express
+- EJS
+- body-parser
+- mongoose（用来连接 MongoDB）
+
+## app.js（启动文件）
+
+这一次，我们使用 app.js 为启动文件，给它写入基础内容：
+
+```js
+let express =  require('express');
+
+let app = express();
+
+app.set('view engine','ejs');
+
+app.use(express.static('./public'));
+
+app.listen('3000');
+
+console.log('you are listen to port 3000');
+```
+
+## controller(todoListContorller.js 路由控制文件)
+
+这一次，我们把路由写在 controller 文件夹下的 todoListcontroller.js 文件下，主要包括获取 list 的 get 方法，新增 list 的 create 方法，删除 list 的 delete 方法：
+
+```js
+module.exports = function (app) {
+    // get
+    app.get('/todo', function (req, res) {
+
+    });
+    // create
+    app.post('/todo', function (req, res) {
+
+    })
+    // delete
+    app.delete('/todo:/item', function (req, res) {
+
+    })
+}
+```
+
+在 app.js 中导入：
+
+```js
+let todoListController = require('./controllers/todoListController');
+```
+
+然后使用，把 app.js 中的 app 传入 todoListContorllor.js 中：
+
+```js
+todoListController(app);
+```
+
+【注意】
+
+我们这里的分层逻辑是，请求相关的放在 controller，数据库相关的放到 model 中，视图相关是 view。即 MVC。
+
+## 静态主页面
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TodoList</title>>
+	// 这里的 href 可以直接使用 `/assets` 的原因是在 app.js 中我们引入了静态资源的
+	// 相应的 jQuery，js 和 css 放在的 public/assets 里面
+    <script src="/assets/jQuery.js"></script
+    <link rel="stylesheet" href="/assets//styles.css" type="text/css">
+    <script src="/assets//todo-list.js"></script>
+</head>
+<body>
+    <div id="todo-table">
+        <form>
+            <input type="text" name="item" placeholder="Add new item..." required />
+            <button type="submit">Add Item</button>
+        </form>
+        <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+</body>
+</html>
+```
+
+有了表单，就去 todoListContorller.js 文件中把这个页面通过 get 发送到浏览器：
+
+```js
+// get
+app.get('/todo', function (req, res) {
+    res.render('todo')
+});
+```
+
+## 动态主界面
+
+上面的界面中的内容是静态的，我们在 server 定义数据，然后然 client 动态生成 ul list：
+
+先修改 todoListController.js：
+
+```js
+let data = [
+    {
+        "item": "get milk"
+    },
+    {
+        "item": "dog"
+    },
+    {
+        "item": "cat"
+    }
+]
+```
+
+```js
+// get
+app.get('/todo', function (req, res) {
+    res.render('todo', { todos: data })
+});
+```
+
+然后对应主界面的 ul list：
+
+```ejs
+<ul>
+	<% todos.forEach(item => { %>
+		<li><%= item.item %></li>
+	<% }); %>
+</ul>
+```
+
+这样页面就是动态渲染的 server 提供的数据了。
+
+## 实现增加功能
+
+在我们写的 todo-list.js 中，定义了点击 add item 后进行的操作：把 input 的内容通过 post 发送给 server 的 todo 路由。
+
+在 todoListController.js 中使用 body-parser 中间件获取 post 的上传的内容：
+
+先导入和定义：
+
+```js
+let bodyParser = require('body-parser');
+let urlencodeparser = bodyParser.urlencoded({ extended: "false" });
+```
+
+然后在 post 中使用：
+
+```js
+app.post('/todo', urlencodeparser, function (req, res) {
+    data.push(req.body);
+    res.json(data);
+})
+```
+
+上面使用了中间件，获取到了传递过来的数据：req.body，然后 push 进 data 数组。
+
+此时，我们就把数据保存在内存中了，但是没有持久化，刷新即消失。
+
+这里的 res.json() 是响应的 json，但实际上可以响应任何内容。
+
+## 实现删除功能
+
+同样的，在我们写的 todo-list.js 中，实现了点击列表中的某一项就发送该项的内容到 todo 的 delete 的方法。
+
+所以我们现在只需要去 todoListController.js 中修改 delete 方法的内容：
+
+```js
+// delete
+app.delete('/todo/:item', function (req, res) {
+    data = data.filter((todo) => {
+        return todo.item.replace(/ /g, "-") !== req.params.item;
+    });
+    res.json(data);
+})
+```
+
+**filter()** 方法创建一个新数组, 其包含通过所提供函数实现的测试的所有元素。 所以我们通过这种方法进行了数组元素的删除。
+
+```js
+ todo.item.replace(/ /g, "-")
+```
+
+这里这么写，是用正则把 data 中有空格的内容转化成 `-`，例如：`get milk` 会转化成 `get-milk`。之所以这样写，是因为我们的 todo-list.js 中对传递在 url 后面的内容做了处理，把空格转化成了 `-`，所以我们这里就对我们的 data 做相应的处理。
+
+## 使用数据库（MongoDB）
+
+虽然是使用 MongoDB，但是实际上是使用的线上服务……
+
+我们使用一个叫 mongoose 的插件帮助我们连接 MongoDB。（也可以使用 mongolass 这个插件，两者大同小异）。
+
+详情查看[文档](http://mongoosejs.net/)。
+
+# 总结
+
+Node.js 是利用模块进行的服务器开发，所以学习过程中会遇到很多的库，这些库只要仔细研读过文档就能基本使用，所以我们在开发前可以仔细阅读需要的文档。
+
+而且也因为它易于使用的特点，我们不能只流于表面，在了解过后，要深入地去了解其内在。

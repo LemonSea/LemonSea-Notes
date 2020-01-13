@@ -1,0 +1,1027 @@
+---
+title: Node.js 基础
+date: 2019-10-05 11:44:00
+categories: React
+tags:
+ - Node.js
+
+---
+
+node.js 的 基础。
+<!--more-->
+
+# node.js 基础
+
+> [node.js 文档（英文）](https://nodejs.org/en/docs/)
+>
+> [node.js 文档（中文）](http://nodejs.cn/api/)
+
+## 本质
+
+Node.js 的本质是一个在服务端允许 JavaScript 的方法，内置的 V8 引擎（Google Chrome）也是这个引擎。
+
+我们写了一个 JavaScript 文件后，可以使用 node 命令执行它。
+
+eg：
+
+```bash
+$ node app.js
+```
+
+上面的命令会在当前文件夹下找到 app.js 这个文件然后执行它。v
+
+## 全局变量
+
+有包括 `console`（输出），`__dirname`（文件目录位置），`__filename`（文件位置） 等全局对象，具体可看官方文档。
+
+> [全局变量文档（中文）](http://nodejs.cn/api/globals.html)
+
+## 模块
+
+node.js 的导入导出与 JavaScript 不同，导出使用 `module.exports`，导入使用 `require()`
+
+### 单个 导出/导入
+
+- 导出
+
+```javascript
+let count = (arr) => {
+    return `${arr.length} elements in the array`
+}
+module.exports = count
+```
+
+- 导入
+
+```javascript
+var counter = require('./count')
+
+console.log(counter(['ruby','vue','react']))
+```
+
+### 多个 导出/导入
+
+- 导出
+
+```js
+let count = (arr) => {
+    return `${arr.length} elements in the array`
+}
+
+let adder = (a,b) => {
+    return `the sum fo the two number is ${a+b}`
+}
+
+let pi = 3.14
+
+module.exports.counter = count
+module.exports.adder = adder
+module.exports.pi = pi
+```
+
+上面的写法相当于暴露了一个对象，等同于：
+
+```js
+let count = (arr) => {
+    return `${arr.length} elements in the array`
+}
+
+let adder = (a,b) => {
+    return `the sum fo the two number is ${a+b}`
+}
+
+let pi = 3.14
+
+module.exports = {
+    counter:count,
+    adder,
+    pi
+}
+```
+
+- 导入
+
+```js
+var stuff = require('./count')
+
+console.log(stuff.counter(['ruby','vue','react']))
+console.log(stuff.adder(2,6))
+console.log(stuff.pi)
+```
+
+这里就是接收了一个对象，然后调用里面的方法，等同于：
+
+```js
+var counter = require('./count').counter
+var adder = require('./count').adder
+var pi = require('./count').pi
+
+console.log(counter(['ruby','vue','react']))
+console.log(adder(2,6))
+console.log(pi)
+```
+
+## 事件（events）
+
+### 基础
+
+node.js 写事件的方法：
+
+```js
+// 导入事件库
+let events = require('events');
+
+// 新增事件
+let myEmitter = new events.EventEmitter();
+
+// 绑定监听函数
+myEmitter.on('someEvent',(message)=>{
+    console.log(message);
+})
+
+// 触发事件（代码触发）
+myEmitter.emit('someEvent','the event was emitted');
+```
+
+首先导入事件库，然后新增事件，之后绑定监听函数，这里和 JavaScript 一样，都是一个事件名称加一个回调函数。
+
+触发事件的时候我们用代码触发，直接加上事件的名称，会自动去找事件然后触发。
+
+### 进阶
+
+```js
+// 导入事件库
+let events = require('events');
+// 导入工具库
+let util = require('util')
+
+// 定义一个父类
+let Person = function (name) {
+    this.name = name
+}
+
+// inherits 表示继承，可查阅官方文档
+util.inherits(Person, events.EventEmitter);
+
+let make = new Person('make');
+let lily = new Person('lily');
+let july = new Person('july');
+
+let person = [make, lily, july]
+
+// 循环数组绑定事件
+person.forEach(function(person){
+    person.on('speak',function(message){
+        console.log(person.name + ` said:` + message);
+    })
+})
+
+make.emit('speak','hi')
+lily.emit('speak','how are you')
+july.emit('speak','nice to meet you')
+```
+
+> [events 事件触发器库文档（中文）](http://nodejs.cn/api/events.html)
+>
+> [util 工具库文档（中文）](http://nodejs.cn/api/util.html)
+
+## 文件系统（同步、异步）（fs）
+
+### 读取文件内容
+
+- 同步
+
+简单读取同目录下的文件 `ReacMe.txt`：
+
+```js
+// 导入文件系统库
+let fs = require('fs');
+
+// 读取文件（第一个参数是文件目录，第二个参数是编码格式)
+let readMe = fs.readFileSync('readMe.txt','utf8');
+
+console.log(readMe)
+```
+
+现在就可以打印出当前的文件内容了。
+
+- 异步
+
+```js
+let readme = fs.readFile('readMe.txt','utf8',function(err,data){
+    console.log(data)
+})
+```
+
+`fs.readFile` 是异步的，它的第一个参数是文件目录，第二个参数是一个回调函数：
+
+```js
+fs.readFile('<目录>', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+node.js 有一个事件队列，执行当异步操作时，会去事件队列中注册一个事件，这时主线程不会立即执行它，而是分配一个线程去执行它，主线程继续执行其他的同步操作，当分线程执行完毕后，会在主线程空闲时把执行结果反馈给主线程，主线程在来执行异步操作的回调函数。
+
+### 写入文件内容
+
+- 同步
+
+```js
+let fs = require('fs');
+
+let readMe = fs.readFileSync('readMe.txt','utf8');
+
+// 第一个参数是要写入的文件名，第二个文件是要写入的内容
+fs.writeFileSync('wirteMe.txt',readMe)
+```
+
+执行完毕后，会在当前目录下创建一个文件：`writeMe.txt`（因为当前没有这个文件，有就不会创建），并写入 `readMe` 这个变量的内容。
+
+- 异步
+
+```js
+fs.writeFile('writeMe.txt',readMe,function(err,data){
+        console.log('write is finished')
+    })
+```
+
+> [文件系统文档（中文）](http://nodejs.cn/api/fs.html)
+
+### 删除文件
+
+- 同步
+
+```js
+fs.unlinkSync('readMe.txt')
+```
+
+- 异步
+
+```js
+fs.unlink('writeMe.txt', (err) => {
+    if (err) throw err;
+    console.log('文件已删除');
+});
+```
+
+### 综合
+
+创建一个目录，并且把当前目录下的一个文件复制到新创建的目录中去：
+
+```js
+let fs = require('fs');
+
+fs.mkdir('stuff',function(){
+    fs.readFile('readMe.txt','utf8',function(err,data){
+        fs.writeFile('./stuff/readMe.txt',data,function(err,data){
+            console.log('success!')
+        })
+    })
+})
+```
+
+ ## 流和管道
+
+在 node.js 中，数据的请求和响应对应的就是输入和输出的流，webpack，gulp 等也大量运用了流，文件的打包压缩也是通过流来实现的。
+
+### 读取数据的流
+
+```js
+let fs = require('fs')
+
+// 创建一个输入的流，读取 readMe.txt
+let myReadStream = fs.createReadStream(__dirname + '/readMe.txt')
+
+// 如果没有加入编码而是直接输出，输出的是 Buffer
+myReadStream.setEncoding('utf8')
+
+let data = ''
+
+// data => 接收数据用的监听函数
+myReadStream.on('data',function(chunk){
+    console.log(chunk)  // 如果没有加入编码，这里会输出 buffer
+    data += chunk;
+})
+
+// end => 结束之后的监听函数
+myReadStream.on('end',function(){
+    console.log(data)
+})
+```
+
+以上就实现了一个简单的读取 `readMe.txt` 中数据的流，它就相当于上面的文件系统中的读取文件内容。
+
+### 写入数据的流
+
+```js
+let fs = require('fs')
+
+// 创建一个输入的流，读取 readMe.txt
+let myReadStream = fs.createReadStream(__dirname + '/readMe.txt');
+// 创建一个输出的流，修改 writeMe.txt
+let myWriteStream = fs.createWriteStream(__dirname + '/writeMe.txt');
+
+// 如果没有加入编码而是直接输出，输出的是 Buffer
+myReadStream.setEncoding('utf8')
+
+let data = ''
+
+// data => 接收数据用的监听函数
+myReadStream.on('data',function(chunk){
+    // 写入数据
+    myWriteStream.write(chunk)
+})
+
+// end => 结束之后的监听函数
+myReadStream.on('end',function(){
+    // console.log(data)
+})
+```
+
+上面的代码在读取的基础上做了一些修改，我们创建了一个输出了流，在读取了 `readMe.txt` 后，把 `readMe.txt` 的内容给了 `writeMe.txt`，它就相当于上面的文件系统中的写入文件内容。
+
+再来试一遍写入的流：
+
+```js
+let fs = require('fs')
+
+// 创建一个输出的流，修改 writeMe.txt
+let myWriteStream = fs.createWriteStream(__dirname + '/writeMe.txt');
+// 创建一个数据
+let writeData = 'hello word';
+// write => 写入，第一个参数是数据，第二个参数是编码
+myWriteStream.write(writeData,'utf8');
+// end => 写入结束
+myWriteStream.end()
+// finish => 结束后的监听函数
+myWriteStream.on('finish',function(){
+    console.log('finish')
+})
+```
+
+使用管道实现：
+
+```js
+let fs = require('fs')
+
+// 创建一个输入的流，读取 readMe.txt
+let myReadStream = fs.createReadStream(__dirname + '/readMe.txt');
+// 创建一个输出的流，修改 writeMe.txt
+let myWriteStream = fs.createWriteStream(__dirname + '/writeMe.txt');
+// 使用管道
+myReadStream
+    .pipe(myWriteStream)
+    .on('finish',function(){
+        console.log('done');
+    })
+```
+
+可以看到，使用管道的话，只要一句话就可以读出 `readMe.txt` 的内容，然后给 `writeMe.txt`，结束后打印 'done'。
+
+## HTTP（http）
+
+### 响应纯文本
+
+先来实现一个 server
+
+```js
+let http = require('http')
+
+// 创建一个 server，request => 请求,response => 响应，这两个参数实现一个流的实例
+let server = http.createServer(function(request,response){
+    console.log('Request received');
+    // 响应第一个参数：状态码，第二个参数：响应内容的格式
+    response.writeHead(200,{'Content-Type':'text/plain'});
+    // 响应的内容
+    response.write('hello from out application');
+    // 响应结束
+    response.end();
+})
+// 这个 server 在 3000 端口上监听
+server.listen(3000,'127.0.0.1');
+console.log('Server started on localhost port 3000')
+```
+
+此时打开浏览器，在 3000 端口上就可以看见响应的内容，在谷歌调试工具的 `Network` 可以看见请求信息。
+
+在终端中可以看见启动服务后打印了 `Server started on localhost port 3000`，请求了一次 3000 端口后打印了 `Request received`，多次请求可以看见多次打印。
+
+这样我们就创建了一个简单的服务器，并且响应了一个纯文本给浏览器。
+
+### 响应 JSON
+
+响应 JSON 很简单，只要把响应内容的格式改成 `application/json` 就可以了：
+
+```js
+let http = require('http')
+
+let personObj = {
+    'name':'make',
+    'age':'18',
+    'sex':'男'
+}
+
+// 创建一个 server，request => 请求,response => 响应，这两个参数实现一个流的实例
+let server = http.createServer(function(request,response){
+    console.log('Request received');
+    // 响应第一个参数：状态码，第二个参数：响应内容的格式
+    response.writeHead(200,{'Content-Type':'application/json'});
+    // 响应的内容，把 JSON 对象序列化成 string
+    response.write(JSON.stringify(personObj));
+    // 响应结束
+    response.end();
+})
+// 这个 server 在 3000 端口上监听
+server.listen(3000,'127.0.0.1');
+console.log('Server started on localhost port 3000')
+```
+
+上面就响应了一个 JSON 给浏览器，同样的，浏览器可以在 3000 端口查看相应内容。
+
+### 响应 HTML
+
+响应 html，把响应内容的格式改成 `text/html` 就可以了：
+
+```js
+let http = require('http')
+
+let htmlFile = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>NI HAO!</div>
+</body>
+</html>`
+
+// 创建一个 server，request => 请求,response => 响应，这两个参数实现一个流的实例
+let server = http.createServer(function(request,response){
+    console.log('Request received');
+    // 响应第一个参数：状态码，第二个参数：响应内容的格式
+    response.writeHead(200,{'Content-Type':'text/html'});
+    // 响应的内容,响应一个 html
+    response.write(htmlFile);
+    // 响应结束
+    response.end();
+})
+// 这个 server 在 3000 端口上监听
+server.listen(3000,'127.0.0.1');
+console.log('Server started on localhost port 3000')
+```
+
+用流的形式读取页面并响应：
+
+```js
+let http = require('http')
+let fs = require('fs')
+
+// 创建一个输入的流，读取 index.html
+// createReadStream 第一个参数是地址，第二个参数是编码格式
+let myReadStream = fs.createReadStream(__dirname + '/index.html','utf8')
+
+// 创建一个 server，request => 请求,response => 响应，这两个参数实现一个流的实例
+let server = http.createServer(function(request,response){
+    console.log('Request received');
+    // 响应第一个参数：状态码，第二个参数：响应内容的格式
+    response.writeHead(200,{'Content-Type':'text/html'});
+    // 响应的内容,响应一个 html(用管道的方式响应)
+    myReadStream.pipe(response);
+})
+// 这个 server 在 3000 端口上监听
+server.listen(3000,'127.0.0.1');
+console.log('Server started on localhost port 3000')
+```
+
+上面就是读取了 index.html 页面，然后响应给了服务器。
+
+如果我们在响应的内容格式那里写 `texl/plain`，则浏览器不会解析，而是直接显示。
+
+### 模块化重构
+
+把上面的内容打包成一个模块：
+
+```js
+let http = require('http')
+let fs = require('fs')
+
+function startServer() {
+    // 创建一个输入的流，读取 index.html
+    // createReadStream 第一个参数是地址，第二个参数是编码格式
+    let myReadStream = fs.createReadStream(__dirname + '/index.html', 'utf8')
+
+    // 创建一个 server，request => 请求,response => 响应，这两个参数实现一个流的实例
+    let server = http.createServer(function (request, response) {
+        console.log('Request received');
+        // 响应第一个参数：状态码，第二个参数：响应内容的格式
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        // 响应的内容,响应一个 html(用管道的方式响应)
+        myReadStream.pipe(response);
+    })
+    // 这个 server 在 3000 端口上监听
+    server.listen(3000, '127.0.0.1');
+    console.log('Server started on localhost port 3000')
+}
+
+exports.startServer = startServer;
+```
+
+这个模块的文件名称是 `server.js`，然后我们可以在 `app.js` 中调用它：
+
+```js
+let server = require('./server')
+
+server.startServer()
+```
+
+在终端中执行
+
+```bash
+node app
+```
+
+即可在浏览器的 3000 端口看到 `index.html` 的内容。
+
+## 路由
+
+所谓的路由就是根据请求的 url 的不同，响应不同的页面。
+
+### 基础
+
+我们可以通过 request.url 来获取请求的 url 并进行判断，重构一下之前的代码：
+
+```js
+let http = require('http')
+let fs = require('fs')
+
+function startServer() {
+    let onRequest = function (request, response) {
+        // 通过 request.url 获取请求的 url
+        console.log('Request received' + request.url);
+        // 判断请求的 url，不同的 url 返回不同的内容
+        if (request.url === '/' || request.url === '/home') {
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            fs.createReadStream(__dirname + '/index.html', 'utf8').pipe(response)
+        } else if (request.url === '/review') {
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            fs.createReadStream(__dirname + '/review.html', 'utf8').pipe(response)
+        } else if (request.url === '/api/v1/records') {
+            response.writeHead(200, { 'Content-Type': 'application/json' });
+            let jsonObj = {
+                name:'july',
+                sex:'女',
+                age:'18'
+            }
+            response.end(JSON.stringify(jsonObj))
+        }else{
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            fs.createReadStream(__dirname + '/404.html', 'utf8').pipe(response)
+        }
+    }
+
+    // 创建一个 server
+    let server = http.createServer(onRequest)
+    // 这个 server 在 3000 端口上监听
+    server.listen(3000, '127.0.0.1');
+    // 启动 server 后打印下面的内容
+    console.log('Server started on localhost port 3000')
+}
+
+exports.startServer = startServer;
+```
+
+上面就对请求的 url 进行了判断，当请求不同的 url 的时候，会返回不同的内容。
+
+### 重构路由
+
+上面的路由太繁琐了，严重影响阅读，我们可以对它进行一下重构。
+
+首先，我们写一个 `handler.js`  模块：
+
+```js
+const fs = require('fs')
+
+function home(response) {
+    response.writeHead(200, { 'Content-Type': 'text/html' });
+    fs.createReadStream(__dirname + '/index.html', 'utf8').pipe(response)
+}
+
+function review(response) {
+    response.writeHead(200, { 'Content-Type': 'text/html' });
+    fs.createReadStream(__dirname + '/review.html', 'utf8').pipe(response)
+}
+
+function api_records(response) {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    let jsonObj = {
+        name: 'july',
+        sex: '女',
+        age: '18'
+    }
+    response.end(JSON.stringify(jsonObj))
+}
+
+module.exports = {
+    home,
+    review,
+    api_records
+}
+```
+
+这个模块就是把上面路由对应的判断写了进来，针对对应的 request.url 进行对应的返回，注意这里没有 404 的判断。我们把写的每一个判断都导出。
+
+我们再写一个 `router.js` 模块来进行判断：
+
+```js
+const fs = require('fs')
+
+function route(handle, pathname, response) {
+    console.log('Routeing a request for ' + pathname)
+    if (typeof handle[pathname] === 'function') {
+        handle[pathname](response);
+    } else {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        fs.createReadStream(__dirname + '/404.html', 'utf8').pipe(response)
+    }
+}
+
+module.exports.route = route;
+```
+
+这个模块会接收 handle，pathname，response，其中的 handle 是我们在 app.js 中对 handle.js 进行处理后传递过来的；pathname 就是 `server.js` 里面的 request.url；response 就是 `server.js` 里面的 response。
+
+这里就是对 server 传递过来的 request.url 进行判断，如果在 handle 中有对应的 function，就执行，没有，就返回 404。
+
+我们返回 `app.js`，修改如下：
+
+```js
+let server = require('./server')
+let router = require('./router')
+let handler = require('./handler')
+
+let handle = {};
+handle['/'] = handler.home;
+handle['/home'] = handler.home;
+handle['/review'] = handler.review;
+handle['/api/v1/records'] = handler.api_records;
+
+server.startServer(router.route, handle)
+```
+
+app.js 里面就导入了 handle 模块 和 router 模块，我们会在这里对 handle 模块进行处理。
+
+定义了一个空对象 handle，然后把每一个 handler 对应的 function 都一一对应到 handle 中，把处理好的 handle 和 route 传递给 server 的 startServer 方法。
+
+修改 `server.js` 如下：
+
+```js
+let http = require('http')
+let fs = require('fs')
+
+function startServer(route,handle) {
+    let onRequest = function (request, response) {
+        // 通过 request.url 获取请求的 url
+        console.log('Request received' + request.url);
+        route(handle,request.url,response);
+    }
+
+    // 创建一个 server
+    let server = http.createServer(onRequest)
+    // 这个 server 在 3000 端口上监听
+    server.listen(3000, '127.0.0.1');
+    console.log('Server started on localhost port 3000')
+}
+
+module.exports.startServer = startServer;
+```
+
+可以看到，现在的 server 就是接收 route 和 handle，所有的判断都交给 route 来做，对应的返回在 handle 中查找。
+
+这样看起来我们的路由就很简单了，可读性也非常好。
+
+## 使用 Get 和 Post（url）
+
+### Get 方法
+
+使用 Get 方法传递数据，是会把数据放在 url 后面，所有我们前面的路由那里也需要做一些处理，不能直接给 route 传递 request.url。
+
+我们使用 node.js 的 url 库。
+
+> [url 文档（中文）](http://nodejs.cn/api/url.html)
+
+这个库就是操作 url 的，我们可以通过它对 url 进行取值处理。
+
+对 `server.js` 中的 onRequest 进行修改：
+
+```js
+let url = require('url')
+```
+
+```js
+let onRequest = function (request, response) {
+        // 通过这个方法来获取 url 的 ？前的内容
+        let pathname = url.parse(request.url).pathname;
+        // 通过这个方法来获取 url 传递的参数
+        let params = url.parse(request.url,true).query;
+        // 通过 pathname 获取请求的 url
+        console.log('Request received' + pathname);
+    	// 把 url 和 参数都传递给 route
+        route(handle,pathname,response,params);
+    }
+```
+
+`url.parse(request.url,true).query` 的第一个参数是 url；第二个参数是 true，代表解析这个 url 并返回一个对象，如果是 false 就直接输出一个字符串。
+
+> [url.parse 对应官方文档](http://nodejs.cn/api/url.html#url_url_parse_urlstring_parsequerystring_slashesdenotehost)
+
+对 `router.js` 进行修改：
+
+```js
+const fs = require('fs')
+
+function route(handle, pathname, response, params) {
+    console.log('Routeing a request for ' + pathname)
+    if (typeof handle[pathname] === 'function') {
+        // 传递 response 和 url 的参数
+        handle[pathname](response, params);
+    } else {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        fs.createReadStream(__dirname + '/404.html', 'utf8').pipe(response)
+    }
+}
+
+module.exports.route = route;
+```
+
+在 `handler.js` 中新建一个 function：
+
+```js
+function api_pass(response,params) {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(params))
+}
+
+module.exports = {
+    home,
+    review,
+    api_records,
+    api_pass
+}
+```
+
+修改 `app.js` 的 handle：
+
+```js
+let server = require('./server')
+let router = require('./router')
+let handler = require('./handler')
+
+let handle = {};
+handle['/'] = handler.home;
+handle['/home'] = handler.home;
+handle['/review'] = handler.review;
+handle['/api/v1/records'] = handler.api_records;
+handle['/api/v1/pass'] = handler.api_pass;
+
+server.startServer(router.route, handle)
+```
+
+启动服务，在浏览器中输入：
+
+> http://localhost:3000/api/v1/pass?id=4&&age=25
+
+就可以看见返回的结果：
+
+>```
+>{"id":"4","age":"25"}
+>```
+
+### POST 方法
+
+上面的方法只能获取 Get 请求的数据，我们修改一些 `server.js` 以获取 post 请求的数据：
+
+```js
+let querystring = require('querystring')
+```
+
+```js
+let onRequest = function (request, response) {
+        // 通过这个方法来获取 url 的 ？前的内容
+        let pathname = url.parse(request.url).pathname;
+        // 通过 pathname 获取请求的 url
+        console.log('Request received' + pathname);
+        let data = '';
+        request.on('error', function (err) {
+            console.log(err)
+        }).on('data', function (chunk) {
+            data += chunk;
+        }).on('end', function () {
+            route(handle, pathname, response, querystring.parse(data));
+        })
+    }
+```
+
+这里是对 request 进行了一下判断，监听了 `error`，如果没有错误，就通过 `data` 获取数据，然后在 `end` 时调用了 route。
+
+这里还对 data 做了一下处理，如果不这样处理，后面接收到的就是一个字符串，处理过后，接收到的就是一个 json 数据。
+
+去修改一下 `index.html`：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>HELLO WORD!</div>
+    <form action='/api/v1/records' method="POST">
+        name:<input type="text" name="name" />
+        age:<input type="text" name="age" />
+        <input type="submit" value="submit" />
+    </form>
+</body>
+</html>
+```
+
+加了一个表单，提交的路由是 `/api/v1/records`，所有修改一下 `handler.js` 的 api_records：
+
+```js
+function api_records(response,params) {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(params))
+}
+```
+
+这样我们在主界面填写表单提交后就会在 http://localhost:3000/api/v1/records 页面看见表单的内容。
+
+### 判断 Get 或 Post 请求
+
+上面能处理 post 但不能处理 get，所有我们这里判断一下不同的情况来进行不同的处理：
+
+```js
+let onRequest = function (request, response) {
+        // 通过这个方法来获取 url 的 ？前的内容
+        let pathname = url.parse(request.url).pathname;
+        // 通过 pathname 获取请求的 url
+        console.log('Request received' + pathname);
+        let data = '';
+        request.on('error', function (err) {
+            console.log(err)
+        }).on('data', function (chunk) {
+            data += chunk;
+        }).on('end', function () {
+            // 判断是否是 post 请求
+            if (request.method === 'POST') {
+                route(handle, pathname, response, querystring.parse(data));
+            } else {
+                // Get 方法取值
+                let params = url.parse(request.url, true).query;
+                route(handle, pathname, response, params);
+            }
+        })
+    }
+```
+
+这里就判断了一下 post，实际情况肯定不止这两种，还有 put 等等。
+
+优化：
+
+```js
+let onRequest = function (request, response) {
+        // 通过这个方法来获取 url 的 ？前的内容
+        let pathname = url.parse(request.url).pathname;
+        // 通过 pathname 获取请求的 url
+        console.log('Request received' + pathname);
+    	// 定义的数组
+        let data = [];
+        request.on('error', function (err) {
+            console.log(err)
+        }).on('data', function (chunk) {
+            data.push(chunk);
+        }).on('end', function () {
+            if (request.method === 'POST') {
+                // 如果数据很大，就取消这个请求（1e6：科学计数法，表示一个数字）
+                if(data.length > 1e6){
+                    request.connection.destroy();
+                }
+                // 处理 data
+                data = Buffer.concat(data).toString();
+                route(handle, pathname, response, querystring.parse(data));
+            } else {
+                // Get 方法取值
+                let params = url.parse(request.url, true).query;
+                route(handle, pathname, response, params);
+            }
+        })
+    }
+```
+
+## package.json
+
+我们使用一个项目的时候，如果没有 package.json 文件，可以通过
+
+```bash
+$ npm init
+```
+
+来生成 `package.json` 文件。
+
+其中的 dependencies 是所有安装的包的信息，通过
+
+```bash
+$ npm install --save <包名>
+```
+
+安装的包会被记录在这里面。
+
+其中的 devDependencies  是开发环境下需要使用的包的信息，通过
+
+```bash
+$ npm install --save-dev <包名>
+```
+
+安装的包会被记录在这里面。
+
+其中的 scripts 是定义的运行对应脚本的命令，例如：
+
+```js
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+```
+
+通过在端上运行 app.js 就是：
+
+```bash
+$ npm run start
+```
+
+有了 package.json，其他人如果用你的项目，通过运行
+
+```bash
+$ npm install
+```
+
+可以下载项目需要的依赖的包，然后通过
+
+```bash
+$ npm run start
+```
+
+运行。
+
+当然，上面的都是 npm，现在也有用 yarn 的，方法都类似。
+
+## nodemon 插件
+
+安装 nodemon
+
+```bash
+$ npm install -g nodemon
+```
+
+它的作用是监控所有的文件，当你做了修改后自动重启服务器，这样就不用每次都自己手动重启服务器了。
+
+使用 nodeman 来启动服务：
+
+```bash
+$ nodeman app
+```
+
+启动后会显示
+
+```bash
+[nodemon] 1.19.3
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching dir(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node app.js`
+Server started on localhost port 3000
+```
+
+其中的最后一句（Server started on localhost port 3000）是我们定义在 server.js 中启动服务后打印的内容。
+
+这样代码有改变的时候它会自动重启。
+
+修改一下 package.json：
+
+```js
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+```
+
+这样我们就可以通过 `npm run start` 来使用 nodemon 启动服务了。
+
+这个工具在开发环境中使用，不要在生产环境中使用。
