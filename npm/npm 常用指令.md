@@ -34,7 +34,9 @@ $ npm get global
 
 ## 1.3 安装包信息写入
 
-如果在接上 `--save` 命令，会将安装包信息写入 `package.json` 文件中，当其他开发人员使用代码时，可以使用 `npm install` 直接按照所有 `package.json` 中的依赖。
+如果在接上 `--save` 命令，会将安装包信息写入 `package.json` 文件中的 1`dependencies`，当其他开发人员使用代码时，可以使用 `npm install` 直接安装所有 `package.json` 中的依赖。
+
+【npm 下载时，加上 `--save` 表明是发布时仍然要依赖的包，加上 `--save-dev` 表明是开发和测试时使用的包。】
 
 # 2. 卸载（uninstall）
 
