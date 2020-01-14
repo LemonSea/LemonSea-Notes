@@ -1,0 +1,131 @@
+# 1. 添加依赖包（yarn add）
+
+语法：
+
+```shell
+$ yarn add [package]@[version]
+```
+
+将会把安装的包在 `package` 的 `dependencies` 中注册。
+
+## 1.1 默认安装规则
+
+- 如果不知道 `version`，会默认安装最新版本。
+
+- 默认本地安装。
+
+- 默认写入 `package` 中的 `dependencies` 中。
+
+## 1.2 注册为开发者依赖
+
+使用 `--dev` 或 `-D` 会注册如 `devdependencies`。
+
+【注意：`-D` 不能小写】
+
+## 1.3 全局安装
+
+```shell
+$ yarn global add <package...>
+```
+
+【最好本地安装，且什么指令顺序不能改变，如果改变会变成本地安装】
+
+# 2. 移除依赖包（yarn remove）
+
+语法：
+
+```shell
+$ yarn remove <package...>
+```
+
+运行 `yarn remove foo` 会从你的直接依赖里移除名为 `foo` 的包，在此期间会更新你的 `package.json` 和 `yarn.lock` 文件。
+
+# 3. 升级依赖包（yarn upgrade）
+
+语法：
+
+```shell
+$ yarn upgrade [package | package@tag | package@version | @scope/]... [--ignore-engines] [--pattern]
+```
+
+可以选择指定一个或多个包名称。指定包名称时，将只升级这些包。未指定包名称时，将升级所有依赖项。
+
+# 4. 缓存（yarn cache）
+
+## 4.1 查询全局缓存
+
+语法：
+
+```shell
+$ yarn cache dir
+```
+
+运行 yarn cache dir 会打印出当前的 yarn 全局缓存在哪里。
+
+## 4.2 查询匹配指定模式的已缓存的包
+
+语法：
+
+```shell
+$ yarn cache list --pattern <pattern>
+```
+
+eg：
+
+```shell
+$ yarn cache list --pattern "gulp-(match|newer)"
+```
+
+## 4.3 清除全局缓存
+
+语法：
+
+```shell
+$ yarn cache clean
+```
+
+运行此命令将清除全局缓存。 将在下次运行 yarn 或 yarn install 时重新填充。
+
+# 5 启动命令（yarn run）
+
+语法：
+
+```shell
+$ yarn run [script] [<args>]
+```
+
+如果你已经在你的包里定义了 `scripts`，这个命令会运行指定的 `[script]`。eg：
+
+```shell
+$ yarn start
+$ yarn build
+```
+
+# 6 查询依赖（yarn list）
+
+语法：
+
+```shell
+$ yarn list [--depth] [--pattern]
+```
+
+默认情况下，所有包和它们的依赖会被显示。 要限制依赖的深度，你可以给 list 命令添加一个标志 `--depth` 所需的深度。eg：
+
+```shell
+$ yarn list --depth=0
+```
+
+# 7 查看yarn 全局安装的根目录
+
+语法：
+
+```shell
+$ yarn global bin
+```
+
+# 8 yarn 指定淘宝源
+
+```shell
+$ yarn config set registry http://registry.npm.taobao.org
+```
+
