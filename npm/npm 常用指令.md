@@ -46,13 +46,15 @@ $ npm get global
 $ npm uninstall moudleName
 ```
 
-卸载对于模块。
+卸载对应模块。
 
 【参数】
 
 | Parameter  | Description  |
 | ---------- | ------------ |
 | moudleName | 安装包的名称 |
+
+【加上 `--save` 时，会在删除的同时移除对应的信息。 
 
 # 3. 更新（update）
 
