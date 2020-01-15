@@ -1,5 +1,18 @@
+/**
+ * app.js 入口模块
+ * 职责：
+ *  创建服务
+ *  配置服务
+ *      - 模板引擎
+ *      - body-parser 的 post 解析功能
+ *      - 静态资源服务
+ * 挂载路由
+ * 监听端口启动服务
+ */
+
 let express = require('express')
-let fs = require('fs')
+
+let router = require('./router');
 
 let app = express()
 
@@ -8,24 +21,8 @@ app.use('/public/', express.static('./public/'))
 
 app.engine('html', require('express-art-template'));
 
-// routes
-app.get('/', function (req, res) {
-    fs.readFile('./db.json', 'utf-8', function (err, data) {
-        if (err) {
-            return res.status(500).send('Server error.')
-        }
-        res.render('index.html', {
-            fruits: [
-                'apple',
-                'banana',
-                'pear',
-                'bear'
-            ],
-            students: JSON.parse(data).students
-        });
-    })    
-});
-
+// 把路由容器挂载到 app 服务中
+app.use(router);
 
 app.listen(3000, () => {
     console.dir('running on port 3000')
