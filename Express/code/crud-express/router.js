@@ -47,7 +47,17 @@ router.post('/students/add', (req, res) => {
      * 2. 处理
      * 3. 发送响应
      */
-    res.send(req.body)
+    dbHelp.save(req.body, (err) => {
+        if (err) {
+            console.log('保存失败了')
+        }
+        console.log('保存成功了')
+
+
+        res.writeHead(302, { 'Location': '/students' });
+        res.end();
+        
+    })
 })
 
 router.get('/students/edit', (req, res) => {

@@ -32,8 +32,40 @@ exports.findAll = (callback) => {
 /**
  * 添加保存学生
  */
-exports.save = () => {
+/* 调用形式：
+save({
+    name: 'xxx',
+    age: 18
+}, (err) => {
+    if (err) {
+        console.log('保存失败了')
+    }
+    console.log('保存成功了')
+})
+*/
 
+exports.save = (student, callback) => {
+    fs.readFile(dbPath, 'utf-8', (err, data) => {
+        if (err) {
+            return callback(err)
+        }
+        let students = JSON.parse(data).students;
+
+        student.id = students[students.length - 1].id + 1;
+
+        students.push(student);
+        let fileData = JSON.stringify({
+            students
+        });
+        fs.writeFile(dbPath, fileData, (err, data) => {
+            if (err) {
+                // 错误传递 err 对象
+                return callback(err);
+            }
+            // 成功就没错，所有错误对象是 null
+            callback(null);
+        })
+    })
 }
 
 /**
