@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-16 17:35:34
- * @LastEditTime : 2020-01-16 21:51:03
+ * @LastEditTime : 2020-01-16 21:54:45
  * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Learning-Notes\README.md
@@ -39,7 +39,7 @@
 # yarn
 
 1. [yarn 常用命令](yarn/1.%20yarn%20常用指令.md)
-2. 
+
 # cmd
 
 1. [cmd 常用命令](cmd/1.%20cmd%20常用命令.md)
