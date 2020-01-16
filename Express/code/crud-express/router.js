@@ -87,7 +87,7 @@ router.post('/students/edit', (req, res) => {
     // 3. 发送响应
     dbHelp.updateById(req.body, (err) => {
         if (err) {
-            return res.status(500).send('Server error.');
+            console.log('保存失败了')
         }
         console.log(req.body)
 
