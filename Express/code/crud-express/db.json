@@ -2,10 +2,9 @@
     "students": [
         {
             "id": 1,
-            "name": "Lemon",
+            "name": "xmeng",
             "gender": 0,
-            "age": 18,
-            "hobits": "basketball、lol"
+            "age": 18
         },
         {
             "id": 2,
@@ -48,20 +47,6 @@
             "gender": 0,
             "age": 18,
             "hobits": "basketball、lol"
-        },
-        {
-            "name": "sa",
-            "gender": "0",
-            "age": "7575",
-            "hobits": "sdfdsf",
-            "id": 8
-        },
-        {
-            "name": "admin",
-            "gender": "0",
-            "age": "77866",
-            "hobits": "sdfdsf",
-            "id": 9
         }
     ]
 }

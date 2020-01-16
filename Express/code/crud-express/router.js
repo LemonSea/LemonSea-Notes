@@ -19,6 +19,7 @@ router.get('/', function (req, res) {
     res.end();
 });
 
+// 渲染 students 首页
 router.get('/students', function (req, res) {
     dbHelp.findAll((err, students) => {
         if (err) {
@@ -37,10 +38,12 @@ router.get('/students', function (req, res) {
     })
 });
 
+// 渲染添加学生页面
 router.get('/students/add', (req, res) => {
     res.render('add.html')
 })
 
+// 处理添加学生请求
 router.post('/students/add', (req, res) => {
     /**
      * 1. 获取表单数据
@@ -53,21 +56,34 @@ router.post('/students/add', (req, res) => {
         }
         console.log('保存成功了')
 
-
-        res.writeHead(302, { 'Location': '/students' });
-        res.end();
-        
+        // express 重定向的方法
+        res.redirect('/students');
     })
 })
 
+// 渲染编辑学生页面
 router.get('/students/edit', (req, res) => {
-
+    // 1. 客户端的列表页处理链接问题（需要有 id 参数）
+    // 2. 获取要编辑的学生 id
+    // 3. 渲染编辑页面
+    //      根据 id 把学生信息查出来
+    //      使用模板引擎渲染页面
+    dbHelp.findById(parseInt(req.query.id), (err, student) => {
+        if (err) {
+            return res.status(500).send('Server error.');
+        }
+        res.render('edit.html', {
+            student
+        })
+    })
 })
 
+// 处理编辑学生请求
 router.post('/students/edit', (req, res) => {
 
 })
 
+// 处理删除请求
 router.get('/students/delete', (req, res) => {
 
 })

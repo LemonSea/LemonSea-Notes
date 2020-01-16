@@ -12,7 +12,6 @@
 
 var express = require('express')
 var bodyParser = require('body-parser')
-
 let router = require('./router');
 
 let app = express()
@@ -27,7 +26,6 @@ app.engine('html', require('express-art-template'));
 // 配置 bodyParse
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
 // parse application/json
 app.use(bodyParser.json())
 
