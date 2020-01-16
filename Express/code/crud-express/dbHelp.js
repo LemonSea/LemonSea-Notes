@@ -43,7 +43,7 @@ exports.findById = (studentId, callback) => {
         }
         let students = JSON.parse(data).students;
 
-        let ret = students.find((item) => item.id === studentId);
+        let ret = students.find((item) => item.id === parseInt(studentId));
 
         callback(null, ret)
     })
@@ -112,8 +112,11 @@ exports.updateById = (student, callback) => {
         }
         let students = JSON.parse(data).students;
 
+        // 因为拿过来的是字符串，所以这里要转成数字
+        student.id = parseInt(student.id)
+
         // find() 函数，返回符合条件的遍历项
-        let stu = students.find((item) => item.id === student.id);
+        let stu = students.find((item) => item.id === parseInt(student.id));
 
         // 遍历拷贝替换数据
         // stu 是对象，所以这里改了 stu 对应 students 里的数据也会改变
@@ -141,6 +144,33 @@ exports.updateById = (student, callback) => {
 /**
  * 删除学生
  */
-exports.delete = () => {
+exports.deleteById = (id, callback) => {
+    fs.readFile(dbPath, 'utf-8', (err, data) => {
+        if (err) {
+            return callback(err)
+        }
+        let students = JSON.parse(data).students;
 
+        // 查到对应学生的下标
+        let deleteIdIndex = students.findIndex((item) => item.id === parseInt(id));
+        console.log('index:'+deleteIdIndex)
+
+        // 使用 slice 删除该学生
+        students.splice(deleteIdIndex, 1);
+
+        // 将对象数据转换为字符串
+        let fileData = JSON.stringify({
+            students
+        });
+
+        // 保存数据
+        fs.writeFile(dbPath, fileData, (err, data) => {
+            if (err) {
+                // 错误传递 err 对象
+                return callback(err);
+            }
+            // 成功就没错，所有错误对象是 null
+            callback(null);
+        })
+    })
 }

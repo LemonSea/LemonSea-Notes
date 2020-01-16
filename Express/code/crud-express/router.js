@@ -80,12 +80,35 @@ router.get('/students/edit', (req, res) => {
 
 // 处理编辑学生请求
 router.post('/students/edit', (req, res) => {
+    // 1. 获取表单数据
+    //  req.body
+    // 2. 更新
+    //  dbHelp.update()
+    // 3. 发送响应
+    dbHelp.updateById(req.body, (err) => {
+        if (err) {
+            return res.status(500).send('Server error.');
+        }
+        console.log(req.body)
 
+        // express 重定向的方法
+        res.redirect('/students');
+    })
 })
 
 // 处理删除请求
 router.get('/students/delete', (req, res) => {
-
+    // 1. 获取要删除的 id
+    // 2. 根据 id 执行删除操作
+    // 3. 根据操作结果发送响应数据
+    console.log(req.query.id)
+    dbHelp.deleteById(req.query.id, (err) => {
+        if (err) {
+            return res.status(500).send('Server error.');
+        }
+        // express 重定向的方法
+        res.redirect('/students');
+    })
 })
 
 module.exports = router
