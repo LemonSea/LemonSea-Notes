@@ -1,0 +1,11 @@
+{
+  "name": "mongoose-demo",
+  "version": "1.0.0",
+  "description": "mongoose 操作 mongodb 的 demo",
+  "main": "app.js",
+  "license": "MIT",
+  "author": "Lemon",
+  "dependencies": {
+    "mongoose": "^5.8.7"
+  }
+}
