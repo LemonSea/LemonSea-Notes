@@ -59,8 +59,32 @@ $ git push origin --delete [远程分支名称]
 
 ## 1.5 拉取远程分支
 
+## 1.5.1 拉取并放到新分支
+
+创建本地分支，该分支复制于对应的远程分支
+
+```shell
+$ git checkout -b <本地分支名> origin/<远程分支名>
+```
+
+### 1.5.2 拉取并放到当前分支
+
+```shell
+$ git pull origin 远程分支　
+```
+
+### 1.5.3 拉取远程分支并比较
+
 ```shell
 $ git fetch origin <远程分支名>:<本地分支名>
+```
+
+该方法常用于比较，eg：
+
+```shell
+$ git fetch origin master:tmp
+$ git diff tmp 
+$ git merge tmp
 ```
 
 ## 1.6 创建并切换到当前分支

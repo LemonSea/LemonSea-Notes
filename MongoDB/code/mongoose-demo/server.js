@@ -1,7 +1,7 @@
 /*
  * @Author: Lemon
  * @Date: 2020-01-16 17:42:16
- * @LastEditTime : 2020-01-16 18:43:19
+ * @LastEditTime : 2020-01-16 19:34:26
  * @LastEditors  : Please set LastEditors
  * @Description: mongodb 服务配置
  * @FilePath: \Learning-Notes\MongoDB\code\mongoose-demo\server.js
@@ -57,11 +57,12 @@ var User = mongoose.model('User', userSchema);
 
 //  4. 通过模型构造函数操作 users 中的数据
 
-// 增加数据
-let user = new User({
-    username: 'Lemon',
-    email: '@qq.com'
-})
+// // 增加数据
+// let user = new User({
+//     username: 'Lemon',
+//     password: 'admin',
+//     email: '@qq.com'
+// })
 
 // // 保存数据
 // user.save((err, ret) => {
@@ -72,13 +73,13 @@ let user = new User({
 //     console.log(ret);
 // })
 
-// // 查询所有
-// User.find((err, ret) => {
-//     if (err) {
-//         return console.log('查询失败');
-//     }
-//     console.log(ret);
-// })
+// 查询所有
+User.find((err, ret) => {
+    if (err) {
+        return console.log('查询失败');
+    }
+    console.log(ret);
+})
 
 // // 传入的第一个参数会作为条件
 // // 返回所有满足条件的数据
@@ -91,13 +92,44 @@ let user = new User({
 //     console.log(ret);
 // })
 
-// 传入的第一个参数会作为条件
-// 返回所有满足条件的数据
-User.findOne({
-    username:'Lemon'
-}, (err, ret) => {
+// // 传入的第一个参数会作为条件
+// // 返回所有满足条件的数据
+// User.findOne({
+//     username:'Lemon'
+// }, (err, ret) => {
+//     if (err) {
+//         return console.log('查询失败');
+//     }
+//     console.log(ret);
+// }) 
+
+// // 传入的第一个参数会作为条件
+// User.remove({
+//     username: 'Lemon'
+// }, (err, ret) => {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     console.log(ret);
+// })
+
+// // 更新
+// // 根据 id 更新 数据
+// User.findByIdAndUpdate('5e20481757283a044c4e91f1', {
+//     password: '123456'
+// }, (err, ret) => {
+//     if (err) {
+//         return console.log('更新出错');
+//     }
+//     console.log(ret)
+// })
+
+// 更新
+// 根据 name 更新 数据
+var query = { username: 'Lemon' };
+User.findOneAndUpdate(query, { username: 'jason bourne' }, (err, ret) => {
     if (err) {
-        return console.log('查询失败');
+        return console.log('更新出错');
     }
-    console.log(ret);
+    console.log(ret)
 })

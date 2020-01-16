@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-16 17:35:34
- * @LastEditTime : 2020-01-16 17:38:39
+ * @LastEditTime : 2020-01-16 19:48:21
  * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Learning-Notes\README.md
@@ -24,5 +24,5 @@
 
 # MongoDB
 
-1. [MongoDB 基础](/MongoDB/notes/MongoDB%20基础.md)
-2. [mongoose 操作](/MongoDB/notes/mongoose%20操作.md)
+1. [MongoDB 基础](/MongoDB/notes/1.%20MongoDB%20基础.md)
+2. [mongoose 基础操作](/MongoDB/notes/2.%20mongoose%20基础操作.md)

@@ -1,0 +1,21 @@
+{
+  "name": "crud-express",
+  "version": "1.0.0",
+  "description": "第一个 curd-express 小 demo",
+  "main": "app.js",
+  "author": "Lemon",
+  "license": "MIT",
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "body-parser": "^1.19.0",
+    "bootstrap": "3.3.7",
+    "express": "^4.17.1",
+    "express-art-template": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
