@@ -6,7 +6,7 @@
  */
 let fs = require('fs')
 let express = require('express')
-let dbHelp = require('./dbHelp')
+let fsHelp = require('./fsHelp')
 
 // 使用 express 的路由模块
 // 创建一个路由容器
@@ -21,7 +21,7 @@ router.get('/', function (req, res) {
 
 // 渲染 students 首页
 router.get('/students', function (req, res) {
-    dbHelp.findAll((err, students) => {
+    fsHelp.findAll((err, students) => {
         if (err) {
             return res.status(500), send('Server error.')
         }
@@ -50,7 +50,7 @@ router.post('/students/add', (req, res) => {
      * 2. 处理
      * 3. 发送响应
      */
-    dbHelp.save(req.body, (err) => {
+    fsHelp.save(req.body, (err) => {
         if (err) {
             console.log('保存失败了')
         }
@@ -68,7 +68,7 @@ router.get('/students/edit', (req, res) => {
     // 3. 渲染编辑页面
     //      根据 id 把学生信息查出来
     //      使用模板引擎渲染页面
-    dbHelp.findById(parseInt(req.query.id), (err, student) => {
+    fsHelp.findById(parseInt(req.query.id), (err, student) => {
         if (err) {
             return res.status(500).send('Server error.');
         }
@@ -83,9 +83,9 @@ router.post('/students/edit', (req, res) => {
     // 1. 获取表单数据
     //  req.body
     // 2. 更新
-    //  dbHelp.update()
+    //  fsHelp.update()
     // 3. 发送响应
-    dbHelp.updateById(req.body, (err) => {
+    fsHelp.updateById(req.body, (err) => {
         if (err) {
             console.log('保存失败了')
         }
@@ -102,7 +102,7 @@ router.get('/students/delete', (req, res) => {
     // 2. 根据 id 执行删除操作
     // 3. 根据操作结果发送响应数据
     console.log(req.query.id)
-    dbHelp.deleteById(req.query.id, (err) => {
+    fsHelp.deleteById(req.query.id, (err) => {
         if (err) {
             return res.status(500).send('Server error.');
         }
