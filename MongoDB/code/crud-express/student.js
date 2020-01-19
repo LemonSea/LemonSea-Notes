@@ -1,12 +1,3 @@
-# 1. 重构部分
-
-原系统是使用的文件进行的数据的存储，这次重构使用 mongodb 数据库进行存储类容，mongodb 数据库的连接和管理使用 mongoose。
-
-# 2. 使用 mongoose 管理数据库与 model
-
-兴建 student.js 类（该类进行连接和管理 mongodb 数据库的 itcast 数据库中的 student 集合。）：
-
-```js
 /*
  * @Author: Lemon
  * @Date: 2020-01-19 17:13:43
@@ -41,5 +32,3 @@ let studentSchema = new Schema({
 
 // 直接导出模型构造函数
 module.exports = mongoose.model('student', studentSchema)
-```
-
