@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/Blog');
 
 let Schema = mongoose.Schema;
 
