@@ -3,16 +3,18 @@ let User = require('../models/user');
 
 let router = express.Router();
 
+// 获取主页
 router.get('/', (req, res) => {
     res.render('index.html', {
         author: "lemon"
     })
 })
-
+// 渲染注册页面
 router.get('/register', (req, res) => {
     res.render('register.html')
 })
 
+// 处理注册请求
 router.post('/register', (req, res) => {
     let body = req.body;
     console.log(body)
