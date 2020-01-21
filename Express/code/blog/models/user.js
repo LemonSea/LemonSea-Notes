@@ -8,20 +8,20 @@ let userSchema = new Schema({
         type: String,
         required: true,
     },
-    nickName: {
+    nickname: {
         type: String,
         required: true
     },
-    passWord: {
+    password: {
         type: String,
         required: true
     },
-    createTime: {
+    created_time: {
         type: Date,
         // 这里不能写 Date.now()，因为会即刻调用
         default: Date.now
     },
-    editTime: {
+    last_modified_time: {
         type: Date,
         default: Date.now
     },
@@ -30,7 +30,7 @@ let userSchema = new Schema({
         type: String,
         default: '/public/img/avatar-default.png'
     },
-    bip: {
+    bio: {
         type: String,
         default: ''
     },
