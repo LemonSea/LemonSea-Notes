@@ -2,8 +2,15 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser');
 let router = require('./routes/router');
-
-let app = express();
+var session = require('express-session');
+ 
+var app = express()
+ 
+app.use(session({
+  secret: 'hello kity',
+  resave: false,
+  saveUninitialized: true
+}))
 
 
 app.use('/public/', express.static(path.join(__dirname, '/public/')));
