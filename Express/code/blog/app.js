@@ -1,14 +1,7 @@
-/*
- * @Author: your name
- * @Date: 2020-01-20 20:06:51
- * @LastEditTime : 2020-01-20 20:16:37
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \Learning-Notes\Express\code\blog\app.js
- */
 let express = require('express');
 let path = require('path');
-var bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
+let router = require('./routes/router');
 
 let app = express();
 
@@ -24,11 +17,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-    res.render('index.html',{
-        author: "lemon"
-    })
-})
+// 把路由容器挂载到 app 服务中
+app.use(router);
 
 app.listen(3000, () => {
     console.dir('port on localhost:3000')
