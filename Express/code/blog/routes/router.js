@@ -1,5 +1,6 @@
 let express = require('express');
 let User = require('../models/user');
+let md5 = require('blueimp-md5');
 
 let router = express.Router();
 
@@ -42,7 +43,9 @@ router.post('/register', (req, res) => {
                 "message": "A mailbox or nickname already exists!"
             })
         }
-        console.log(body)
+        // 对密码进行重复加密
+        // 也可以使用随机加盐的方法进行加密
+        body.password = md5(md5(body.password));
         new User(body).save((err, data) => {
             if (err) {
                 return res.status(500).json({
@@ -68,6 +71,5 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
 
 })
-
 
 module.exports = router;
