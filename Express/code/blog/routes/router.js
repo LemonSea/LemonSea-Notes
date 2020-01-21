@@ -17,7 +17,6 @@ router.get('/register', (req, res) => {
 // 处理注册请求
 router.post('/register', (req, res) => {
     let body = req.body;
-    console.log(body)
     User.findOne({
         $or: [
             {
@@ -29,19 +28,35 @@ router.post('/register', (req, res) => {
         ]
     }, (err, data) => {
         if (err) {
-            return res.status(500).send('Server Error');
+            return res.status(500).json({
+                "err_code": 500,
+                "success": false,
+                "message": "Server Error!"
+            });
         }
 
         if (data) {
-            return res.status(200).send({
+            return res.status(200).json({
                 "err_code": -1,
+                "success": true,
                 "message": "A mailbox or nickname already exists!"
             })
         }
-
-        return res.status(200).send({
-            "err_code": 0,
-            "message": "OK"
+        console.log(body)
+        new User(body).save((err, data) => {
+            if (err) {
+                return res.status(500).json({
+                    "err_code": 500,
+                    "success": false,
+                    "message": "Server Error!"
+                });
+            }
+            console.log(data)
+            return res.status(200).json({
+                "err_code": 0,
+                "success": true,
+                "message": "OK"
+            })
         })
     })
 
