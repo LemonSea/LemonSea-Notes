@@ -48,7 +48,7 @@ router.post('/register', (req, res) => {
                 return res.status(500).json({
                     "err_code": 500,
                     "success": false,
-                    "message": "Server Error!"
+                    "message": "Internal Error!"
                 });
             }
             console.log(data)
@@ -59,7 +59,6 @@ router.post('/register', (req, res) => {
             })
         })
     })
-
 })
 
 router.get('/login', (req, res) => {
