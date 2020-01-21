@@ -16,52 +16,41 @@ router.get('/register', (req, res) => {
 })
 
 // 处理注册请求
-router.post('/register', (req, res) => {
+router.post('/register',async (req, res) => {
     let body = req.body;
-    User.findOne({
-        $or: [
-            {
-                email: body.email
-            },
-            {
-                nickname: body.nickname
-            }
-        ]
-    }, (err, data) => {
-        if (err) {
-            return res.status(500).json({
-                "err_code": 500,
-                "success": false,
-                "message": "Server Error!"
-            });
+    try {
+        // 验证邮箱唯一性
+        if (await User.findOne({ email: body.email })) {
+            return res.status(200).json({
+                err_code: 1,
+                message: 'Mailbox already exists!'
+            })
         }
 
-        if (data) {
+        // 验证昵称唯一性
+        if (await User.findOne({ nickname: body.nickname })) {
             return res.status(200).json({
-                "err_code": -1,
-                "success": true,
-                "message": "A mailbox or nickname already exists!"
+                err_code: 2,
+                message: 'Nickname already exists!'
             })
         }
-        // 对密码进行重复加密
-        // 也可以使用随机加盐的方法进行加密
+
+        // 对密码进行加密
         body.password = md5(md5(body.password));
-        new User(body).save((err, data) => {
-            if (err) {
-                return res.status(500).json({
-                    "err_code": 500,
-                    "success": false,
-                    "message": "Internal Error!"
-                });
-            }
-            console.log(data)
-            return res.status(200).json({
-                "err_code": 0,
-                "success": true,
-                "message": "OK"
-            })
+
+        // 创建用户，执行注册
+        await new User(body).save();
+
+        res.status(200).json({
+            err_code: 0,
+            message: 'OK'
         })
-    })
+    } catch (err) {
+        res.status(500).json({
+            err_code: 500,
+            message: err.message
+        })
+    }
 })
 
 router.get('/login', (req, res) => {
