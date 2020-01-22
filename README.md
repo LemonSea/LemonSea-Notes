@@ -1,11 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2020-01-16 17:35:34
- * @LastEditTime : 2020-01-20 17:22:58
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \Learning-Notes\README.md
- -->
 # 这是我的学习笔记备份记录
 
 # Node.js
@@ -52,3 +44,26 @@
 # VSCode
 
 1. [VSCode 常用快捷键](vs%20code/1.%20常用快捷键.md)
+
+# 小总结
+
+- node 
+  - 原生 get√
+  - express get√
+  - koa2
+- 移动端
+  - flutter
+  - React Native
+- 微信小程序
+  - 原生
+  - mvue
+- 框架
+  - React get√
+  - VUE
+  - Angular
+- 版本管理
+  - git get√
+  - SVN get√
+- 包管理
+  - webpack 
+  - Gulp
