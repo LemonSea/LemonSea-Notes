@@ -96,4 +96,12 @@ router.post('/login', (req, res) => {
     })
 })
 
+// 处理登出请求
+router.get('/logout', (req, res) => {
+    // 清除登录状态
+    req.session.user = null;
+    // 重定向登录页
+    res.redirect('/');
+})
+
 module.exports = router;
