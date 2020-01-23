@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
@@ -10,7 +11,9 @@ module.exports = {
         open: true,
         proxy:{
             './api': 'http://localhost:3000'
-        }
+        },
+        hot: true,  // 开启 HMR 功能
+        hotOnly: true  // 即使 HMR 功能未成功开启，也不让浏览器自动刷新
     },
     entry: {
         main: './src/index.js'
@@ -52,6 +55,7 @@ module.exports = {
         ]
     },
     output: {
+        publicPath: '/',
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
@@ -61,6 +65,7 @@ module.exports = {
         }),
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ]
 }
