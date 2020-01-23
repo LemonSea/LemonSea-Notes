@@ -4,9 +4,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
+    devtool : 'cheap-module-eval-source-map',
     entry: {
-        main: './src/index.js',
-        sub: './src/index.js'
+        main: './src/index.js'
     },
     module: {
         rules: [
@@ -45,7 +45,7 @@ module.exports = {
         ]
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
