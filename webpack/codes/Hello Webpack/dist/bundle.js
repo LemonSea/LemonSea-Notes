@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./img/png.png":
+/*!*********************!*\
+  !*** ./img/png.png ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"47b45ace0ff25cc7bb16cf153dc31bd1.png\");\n\n//# sourceURL=webpack:///./img/png.png?");
+
+/***/ }),
+
 /***/ "./src/content.js":
 /*!************************!*\
   !*** ./src/content.js ***!
@@ -118,7 +130,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nfunction Header() {\r\n    le
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n/* harmony import */ var _content__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./content */ \"./src/content.js\");\n\r\n\r\n\r\n\r\nnew _header__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\r\nnew _sidebar__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\r\nnew _content__WEBPACK_IMPORTED_MODULE_2__[\"default\"]();\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n/* harmony import */ var _content__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./content */ \"./src/content.js\");\n/* harmony import */ var _img_png_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../img/png.png */ \"./img/png.png\");\n\r\n\r\n\r\n\r\n\r\nnew _header__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\r\nnew _sidebar__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\r\nnew _content__WEBPACK_IMPORTED_MODULE_2__[\"default\"]();\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
