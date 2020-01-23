@@ -1,12 +1,3 @@
-import avatar from './avatar.png';
-import './index.scss';
-import createAvatar from './createAvatar';
+const root = document.getElementById('root');
 
-createAvatar()
-
-let img = new Image();
-img.src = avatar;
-img.classList.add('avatar');
-
-let root = document.getElementById('root');
-root.append(img);
+root.innerHTML = '<div class="test">abc</div>'

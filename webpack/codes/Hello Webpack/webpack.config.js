@@ -1,4 +1,5 @@
-const path = require('path')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -29,8 +30,9 @@ module.exports = {
                 }, {
                     loader: "css-loader", // 将 CSS 转化成 CommonJS 模块
                     options: {
-                        importLoaders: 2 // 0 => 无 loader(默认); 1 => postcss-loader; 2 => postcss-loader, sass-loader
-                      }
+                        importLoaders: 2, // 0 => 无 loader(默认); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+                        modules: true  // 启用 CSS 模块
+                    }
                 }, {
                     loader: "sass-loader" // 将 Sass 编译成 CSS
                 },
@@ -43,5 +45,10 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        })
+    ]
 }
