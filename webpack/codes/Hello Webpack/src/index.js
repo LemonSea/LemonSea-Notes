@@ -1,5 +1,8 @@
 import avatar from './avatar.png';
-import './index.css';
+import './index.scss';
+import createAvatar from './createAvatar';
+
+createAvatar()
 
 let img = new Image();
 img.src = avatar;

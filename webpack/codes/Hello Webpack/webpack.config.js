@@ -21,6 +21,22 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // 将 JS 字符串生成为 style 节点
+                }, {
+                    loader: "css-loader", // 将 CSS 转化成 CommonJS 模块
+                    options: {
+                        importLoaders: 2 // 0 => 无 loader(默认); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+                      }
+                }, {
+                    loader: "sass-loader" // 将 Sass 编译成 CSS
+                },
+                {
+                    loader: "postcss-loader"  // 自动添加厂商浅醉
+                }]
             }
         ]
     },
