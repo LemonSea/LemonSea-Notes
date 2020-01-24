@@ -5,11 +5,11 @@ const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
-    devtool : 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-eval-source-map',
     devServer: {
         contentBase: './dist',
         open: true,
-        proxy:{
+        proxy: {
             './api': 'http://localhost:3000'
         },
         hot: true,  // 开启 HMR 功能
@@ -20,6 +20,19 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                options:
+                {
+                    "presets": [["@babel/preset-env", {
+                        useBuiltIns: "usage",
+                        corejs: 3
+                    }]]
+                }
+
+            },
             {
                 test: /\.(png|jpg|gif)$/,
                 use: {
