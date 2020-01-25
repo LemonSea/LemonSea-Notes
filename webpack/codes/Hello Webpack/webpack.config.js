@@ -23,7 +23,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'               
+                loader: 'babel-loader'
             },
             {
                 test: /\.(png|jpg|gif)$/,
@@ -72,5 +72,8 @@ module.exports = {
             cleanAfterEveryBuildPatterns: ['dist']
         }),
         new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+    optimization: {
+        usedExports: true
+    }
 }

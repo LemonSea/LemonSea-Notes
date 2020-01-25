@@ -1,11 +1,3 @@
-import 'regenerator-runtime/runtime';
-import React, { Component } from 'react';
-import ReactDom from 'react-dom';
+import { add } from './main';
 
-class App extends Component {
-    render() {
-        return <div>hello word</div>
-    }
-}
-
-ReactDom.render(<App />, document.getElementById('root'));
+add(1, 2);
