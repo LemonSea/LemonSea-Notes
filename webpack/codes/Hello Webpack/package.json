@@ -1,9 +1,12 @@
 {
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "dev": "webpack-dev-server --config ./build/webpack.dev.js",
+    "dev-build": "webpack --config ./build/webpack.dev.js",
+    "build": "webpack --config ./build/webpack.prod.js"
   },
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/polyfill": "^7.8.3",
@@ -33,6 +36,7 @@
     "regenerator-runtime": "^0.13.3",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3",
-    "url-loader": "^3.0.0"
+    "url-loader": "^3.0.0",
+    "webpack-merge": "^4.2.2"
   }
 }
