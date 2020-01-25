@@ -1,11 +1,11 @@
-
 import 'regenerator-runtime/runtime';
+import React, { Component } from 'react';
+import ReactDom from 'react-dom';
 
-const arr = [
-    new Promise(()=>{}),
-    new Promise(()=>{})
-];
+class App extends Component {
+    render() {
+        return <div>hello word</div>
+    }
+}
 
-arr.map(item => {
-    console.log(item)
-})
+ReactDom.render(<App />, document.getElementById('root'));
