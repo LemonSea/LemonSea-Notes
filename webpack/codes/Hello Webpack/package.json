@@ -2,6 +2,7 @@
   "scripts": {
     "start": "webpack-dev-server"
   },
+  "sideEffects": ["*.css"],
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/polyfill": "^7.8.3",

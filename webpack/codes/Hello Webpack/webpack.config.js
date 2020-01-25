@@ -4,8 +4,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-    mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
+    mode: 'production',
+    devtool: 'cheap-module-source-map',
+    // mode: 'development',
+    // devtool: 'cheap-module-eval-source-map',
     devServer: {
         contentBase: './dist',
         open: true,
