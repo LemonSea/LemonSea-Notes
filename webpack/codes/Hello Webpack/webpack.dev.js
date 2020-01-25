@@ -4,10 +4,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-    mode: 'production',
-    devtool: 'cheap-module-source-map',
-    // mode: 'development',
-    // devtool: 'cheap-module-eval-source-map',
+    mode: 'development',
+    devtool: 'cheap-module-eval-source-map',
     devServer: {
         contentBase: './dist',
         open: true,
@@ -15,7 +13,7 @@ module.exports = {
             './api': 'http://localhost:3000'
         },
         hot: true,  // 开启 HMR 功能
-        hotOnly: true  // 即使 HMR 功能未成功开启，也不让浏览器自动刷新
+        // hotOnly: true  // 即使 HMR 功能未成功开启，也不让浏览器自动刷新
     },
     entry: {
         main: './src/index.js'

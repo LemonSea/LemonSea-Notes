@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "webpack-dev-server"
+    "dev": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "sideEffects": ["*.css"],
   "dependencies": {
