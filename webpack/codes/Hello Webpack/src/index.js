@@ -1,11 +1,11 @@
+function getComponent() {
+    return import(/* webpackChunkName:"lodash" */'loadsh').then(({ default: _ }) => {
+        var element = document.createElement('div');
+        element.innerHTML = _.join(['Dell', 'Lee'], '_');
+        return element;
+    })
+}
 
-import 'regenerator-runtime/runtime';
-
-const arr = [
-    new Promise(()=>{}),
-    new Promise(()=>{})
-];
-
-arr.map(item => {
-    console.log(item)
+getComponent().then(element =>  {
+    document.body.appendChild(element);
 })
