@@ -1,19 +1,14 @@
-// import test from './test';
-// console.log(test.a)
+// 异步加载方式
+async function getComponent() {
+    const { default: _ } = await import(/* webpackChunkName:"lodash" */'loadsh');
 
-import _ from 'loadsh';
-var element = document.createElement('div');
-element.innerHTML = _.join(['Dell', 'Lee'], '_');
-document.body.appendChild(element);
+    const element = document.createElement('div');
+    element.innerHTML = _.join(['Dell', 'Lee'], '_');
+    return element;
+}
 
-// function getComponent() {
-//     return import(/* webpackChunkName:"lodash" */'loadsh').then(({ default: _ }) => {
-//         var element = document.createElement('div');
-//         element.innerHTML = _.join(['Dell', 'Lee'], '_');
-//         return element;
-//     })
-// }
-
-// getComponent().then(element => {
-//     document.body.appendChild(element);
-// })
+document.addEventListener('click', () => {
+    getComponent().then(element => {
+        document.body.appendChild(element);
+    })
+})

@@ -59,8 +59,8 @@ module.exports = {
         splitChunks: {
             chunks: 'all',
             minSize: 30000,
-            // minRemainingSize: 0,
-            maxSize: 50000,
+            //   minRemainingSize: 0,
+            maxSize: 0,
             minChunks: 1,
             maxAsyncRequests: 6,
             maxInitialRequests: 4,
@@ -81,7 +81,7 @@ module.exports = {
         }
     },
     output: {
-        publicPath: '/',
+        // publicPath: '/',
         filename: '[name].js',
         path: path.resolve(__dirname, '../dist')
     }
