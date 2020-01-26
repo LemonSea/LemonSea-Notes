@@ -1,25 +1,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const webpack = require('webpack');
 
 module.exports = {
-    mode: 'development',
-    devtool : 'cheap-module-eval-source-map',
-    devServer: {
-        contentBase: './dist',
-        open: true,
-        proxy:{
-            './api': 'http://localhost:3000'
-        },
-        hot: true,  // 开启 HMR 功能
-        hotOnly: true  // 即使 HMR 功能未成功开启，也不让浏览器自动刷新
-    },
     entry: {
         main: './src/index.js'
     },
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            },
             {
                 test: /\.(png|jpg|gif)$/,
                 use: {
@@ -54,18 +47,26 @@ module.exports = {
             }
         ]
     },
-    output: {
-        publicPath: '/',
-        filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
-    },
     plugins: [
         new HtmlWebpackPlugin({
             template: 'src/index.html'
         }),
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']
-        }),
-        new webpack.HotModuleReplacementPlugin()
-    ]
+        })
+    ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                defaultVendors: false,
+                default: false
+            }
+        }
+    },
+    output: {
+        publicPath: '/',
+        filename: '[name].js',
+        path: path.resolve(__dirname, '../dist')
+    }
 }
