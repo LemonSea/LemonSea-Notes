@@ -55,9 +55,18 @@ module.exports = {
             cleanAfterEveryBuildPatterns: ['dist']
         })
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                defaultVendors: false,
+                default: false
+            }
+        }
+    },
     output: {
         publicPath: '/',
         filename: '[name].js',
         path: path.resolve(__dirname, '../dist')
-    },
+    }
 }
