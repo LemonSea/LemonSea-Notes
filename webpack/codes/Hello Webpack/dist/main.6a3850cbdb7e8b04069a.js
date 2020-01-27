@@ -113,7 +113,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7053b3e4053f89f1567f";
+/******/ 	var hotCurrentHash = "6a3850cbdb7e8b04069a";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -760,7 +760,7 @@
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		"main~._src_index.js~d9becfe9": 0
+/******/ 		"main": 0
 /******/ 	};
 /******/
 /******/ 	var deferredModules = [];
@@ -843,7 +843,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// __webpack_hash__
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
@@ -857,7 +857,7 @@
 /******/
 /******/
 /******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["./src/index.js","vendors~main~._node_modules_l"]);
+/******/ 	deferredModules.push(["./src/index.js","vendors~main"]);
 /******/ 	// run deferred modules when ready
 /******/ 	return checkDeferredModules();
 /******/ })
@@ -873,7 +873,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var loadsh__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! loadsh */ \"./node_modules/loadsh/lodash.js\");\n/* harmony import */ var loadsh__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(loadsh__WEBPACK_IMPORTED_MODULE_0__);\n// import test from './test';\n// console.log(test.a)\n\nvar element = document.createElement('div');\nelement.innerHTML = loadsh__WEBPACK_IMPORTED_MODULE_0___default.a.join(['Dell', 'Lee'], '_');\ndocument.body.appendChild(element); // function getComponent() {\n//     return import(/* webpackChunkName:\"lodash\" */'loadsh').then(({ default: _ }) => {\n//         var element = document.createElement('div');\n//         element.innerHTML = _.join(['Dell', 'Lee'], '_');\n//         return element;\n//     })\n// }\n// getComponent().then(element => {\n//     document.body.appendChild(element);\n// })//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvaW5kZXguanMuanMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvaW5kZXguanM/YjYzNSJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBpbXBvcnQgdGVzdCBmcm9tICcuL3Rlc3QnO1xyXG4vLyBjb25zb2xlLmxvZyh0ZXN0LmEpXHJcblxyXG5pbXBvcnQgXyBmcm9tICdsb2Fkc2gnO1xyXG52YXIgZWxlbWVudCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xyXG5lbGVtZW50LmlubmVySFRNTCA9IF8uam9pbihbJ0RlbGwnLCAnTGVlJ10sICdfJyk7XHJcbmRvY3VtZW50LmJvZHkuYXBwZW5kQ2hpbGQoZWxlbWVudCk7XHJcblxyXG4vLyBmdW5jdGlvbiBnZXRDb21wb25lbnQoKSB7XHJcbi8vICAgICByZXR1cm4gaW1wb3J0KC8qIHdlYnBhY2tDaHVua05hbWU6XCJsb2Rhc2hcIiAqLydsb2Fkc2gnKS50aGVuKCh7IGRlZmF1bHQ6IF8gfSkgPT4ge1xyXG4vLyAgICAgICAgIHZhciBlbGVtZW50ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XHJcbi8vICAgICAgICAgZWxlbWVudC5pbm5lckhUTUwgPSBfLmpvaW4oWydEZWxsJywgJ0xlZSddLCAnXycpO1xyXG4vLyAgICAgICAgIHJldHVybiBlbGVtZW50O1xyXG4vLyAgICAgfSlcclxuLy8gfVxyXG5cclxuLy8gZ2V0Q29tcG9uZW50KCkudGhlbihlbGVtZW50ID0+IHtcclxuLy8gICAgIGRvY3VtZW50LmJvZHkuYXBwZW5kQ2hpbGQoZWxlbWVudCk7XHJcbi8vIH0pIl0sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQUE7QUFBQTtBQUNBO0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFFQTtBQUNBO0FBQ0EiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/index.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var loadsh__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! loadsh */ \"./node_modules/loadsh/lodash.js\");\n/* harmony import */ var loadsh__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(loadsh__WEBPACK_IMPORTED_MODULE_0__);\n\nconst dom = $('<div>');\ndom.html(loadsh__WEBPACK_IMPORTED_MODULE_0___default.a.join(['dell', 'lee']), ' ');\n$('body').append(dom);\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvaW5kZXguanMuanMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvaW5kZXguanM/YjYzNSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgXyBmcm9tICdsb2Fkc2gnO1xyXG5cclxuY29uc3QgZG9tID0gJCgnPGRpdj4nKTtcclxuZG9tLmh0bWwoXy5qb2luKFsnZGVsbCcsICdsZWUnXSksICcgJyk7XHJcbiQoJ2JvZHknKS5hcHBlbmQoZG9tKTsiXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFBQTtBQUFBO0FBRUE7QUFDQTtBQUNBO0EiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/index.js\n");
 
 /***/ })
 
