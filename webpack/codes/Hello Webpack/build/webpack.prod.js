@@ -43,4 +43,5 @@ const prodConfig = {
     },
 }
 
+// module.exports = prodConfig;
 module.exports = merge(commonConfig, prodConfig);
