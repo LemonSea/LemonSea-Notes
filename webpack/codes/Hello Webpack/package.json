@@ -1,8 +1,9 @@
 {
   "scripts": {
     "dev": "webpack-dev-server --config ./build/webpack.dev.js",
-    "dev-build": "webpack --profile --json > stats.json --config ./build/webpack.dev.js",
+    "dev-build": "webpack --config ./build/webpack.dev.js",
     "build": "webpack --config ./build/webpack.prod.js",
+    "dll": "webpack --config ./build/webpack.dll.js",
     "start": "http-server ./dist"
   },
   "sideEffects": [
@@ -32,12 +33,13 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/runtime-corejs3": "^7.8.3",
+    "add-asset-html-webpack-plugin": "^3.1.3",
     "autoprefixer": "^9.7.4",
     "axios": "^0.19.2",
+    "babel-eslint": "8",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
-    "eslint": "^6.8.0",
     "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.9.0",

@@ -4,6 +4,41 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const workboxWebpackPlugin = require('workbox-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+
+const plugins = [
+    new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+    }),
+    new workboxWebpackPlugin.GenerateSW({
+        clientsClaim: true,
+        skipWaiting: true
+    }),
+]
+
+// files 是 dll 目录下的所有文件
+const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
+files.forEach(file => {
+    if (/.*\.dll.js/.test(file)) {
+        plugins.push(
+            new AddAssetHtmlPlugin({
+                filepath: path.resolve(__dirname, '../dll/', file)
+            }),
+        )
+    }
+    if (/.*\.manifest.json/.test(file)) {
+        plugins.push(
+            new webpack.DllReferencePlugin({
+                context: __dirname,
+                manifest: path.resolve(__dirname, '../dll/', file)
+            })
+        )
+    }
+})
 
 const prodConfig = {
     mode: 'production',
@@ -33,16 +68,7 @@ const prodConfig = {
             }
         ]
     },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-          }),
-          new workboxWebpackPlugin.GenerateSW({
-              clientsClaim: true,
-              skipWaiting: true
-          })
-    ],
+    plugins: plugins,
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
     },
