@@ -3,6 +3,7 @@ const commonConfig = require('./webpack.common');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const workboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const prodConfig = {
     mode: 'production',
@@ -37,6 +38,10 @@ const prodConfig = {
             filename: '[name].css',
             chunkFilename: '[id].css',
           }),
+          new workboxWebpackPlugin.GenerateSW({
+              clientsClaim: true,
+              skipWaiting: true
+          })
     ],
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
