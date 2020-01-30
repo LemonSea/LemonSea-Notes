@@ -1,0 +1,15 @@
+{
+  "name": "bundle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "lemon",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/parser": "^7.8.3",
+    "@babel/traverse": "^7.8.3"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.8.3"
+  }
+}

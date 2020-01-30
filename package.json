@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@babel/parser": "^7.8.3",
+    "@babel/traverse": "^7.8.3",
+    "cli-highlight": "^2.1.4",
     "webpack": "^4.41.5"
   }
 }
