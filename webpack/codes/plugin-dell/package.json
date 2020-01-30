@@ -1,0 +1,14 @@
+{
+  "name": "plugin-dell",
+  "version": "1.0.0",
+  "author": "lemon",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "debug": "node --inspect --inspect-brk node_modules/webpack/bin/webpack.js"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
