@@ -29,6 +29,9 @@
 
 1. [1. webpack4 初探](/webpack/notes/1.%20webpack4%20初探.md)
 2. [1. webpack4 核心概念](/webpack/notes/2.%20webpack4%20的核心概念.md)
+3. [1. webpack4 高级概率](/webpack/notes/3.%20webpack4%20高级概念.md)
+4. [1. webpack4 配置案例](/webpack/notes/4.%20webpack4%20配置案例.md)
+5. [1. webpack4 底层原理与脚手架工具分析](/webpack/notes/5.%20webpack4%20底层原理与脚手架工具分析.md)
 
 # Git
 
