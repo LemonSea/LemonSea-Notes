@@ -802,7 +802,7 @@ no-case@^2.2.0:
 
 nodemon@^2.0.2:
   version "2.0.2"
-  resolved "https://registry.npm.taobao.org/nodemon/download/nodemon-2.0.2.tgz#9c7efeaaf9b8259295a97e5d4585ba8f0cbe50b0"
+  resolved "https://registry.npm.taobao.org/nodemon/download/nodemon-2.0.2.tgz?cache=0&sync_timestamp=1576074292357&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnodemon%2Fdownload%2Fnodemon-2.0.2.tgz#9c7efeaaf9b8259295a97e5d4585ba8f0cbe50b0"
   integrity sha1-nH7+qvm4JZKVqX5dRYW6jwy+ULA=
   dependencies:
     chokidar "^3.2.2"
