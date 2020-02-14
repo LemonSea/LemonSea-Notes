@@ -13,12 +13,16 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 let router = require('./router');
+const path = require('path');
+const loaders = require('./src/loaders');
 
 let app = express()
 
 // 配置静态资源访问
 app.use('/node_modules/', express.static('./node_modules/'))
-app.use('/public/', express.static('./public/'))
+// app.use('/public/', express.static('./public/'))
+// app.use('/public/', express.static('./src/public'))
+loaders(app);
 
 // 配置模板引擎
 app.engine('html', require('express-art-template'));
