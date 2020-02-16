@@ -21,22 +21,22 @@ class Graph {
     // 所有节点标记未处理
     let visited = this.createVisitedObject();
     this.dfsHelper(startingNode, visited);
-}
+  }
 
-dfsHelper(startingNode, visited) {
+  dfsHelper(startingNode, visited) {
     // 当前节点标记处理
     visited[startingNode] = true;
     console.log(startingNode);
-	// 获取所有邻节点
+    // 获取所有邻节点
     let arr = this.AdjList.get(startingNode);
 
     for (let elem of arr) {
-        if (!visited[elem]) {
-            // 递归
-            this.dfsHelper(elem, visited);
-        }
+      if (!visited[elem]) {
+        // 递归
+        this.dfsHelper(elem, visited);
+      }
     }
-}
+  }
 }
 
 
